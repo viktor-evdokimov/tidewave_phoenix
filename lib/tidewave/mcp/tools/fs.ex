@@ -26,7 +26,7 @@ defmodule Tidewave.MCP.Tools.FS do
         name: "read_project_file",
         description: """
         Returns the contents of the given file.
-        Supports optional offset and count. To read the full file, only the path needs to be passed
+        Supports an optional line_offset and count. To read the full file, only the path needs to be passed.
         """,
         inputSchema: %{
           type: "object",
