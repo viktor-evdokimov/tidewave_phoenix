@@ -16,7 +16,7 @@ defmodule Tidewave.Router do
     <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <script type="module" src="#{Application.compile_env!(:tidewave, :client_url)}/tc/tc.js"></script>
+      <script type="module" src="#{Application.compile_env(:tidewave, :client_url, "https://tidewave.ai")}/tc/tc.js"></script>
     </head>
     <body></body>
   </html>

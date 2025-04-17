@@ -12,7 +12,7 @@ Tidewave provides tools that allow your LLM of choice to:
 
 - get documentation
 - inspect your application logs to help debugging errors
-- inspect processes
+- inspect and trace processes
 - execute SQL queries and inspect your database
 - evaluate custom Elixir code in the context of your project
 - find Hex packages and search your dependencies
