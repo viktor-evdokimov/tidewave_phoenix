@@ -82,6 +82,21 @@ defmodule Tidewave.MCP.Tools.FSTest do
       assert truncated_content =~ "a [100 characters truncated] ..."
       assert truncated_content =~ "b [100 characters truncated] ..."
     end
+
+    test "does not truncate if raw is set", %{tmp_dir: tmp_dir} do
+      content = String.duplicate("a", 2100) <> "\n" <> String.duplicate("b", 2100)
+      file_path = Path.join(tmp_dir, "long_line_file.txt")
+      File.write!(file_path, content)
+
+      on_exit(fn -> File.rm(file_path) end)
+
+      assert {:ok, read_content, _} =
+               FS.read_project_file(%{"path" => file_path, "raw" => true}, %{})
+
+      refute read_content =~ "a [100 characters truncated] ..."
+      refute read_content =~ "b [100 characters truncated] ..."
+      assert length(:binary.matches(read_content, ["a", "b"])) == 4200
+    end
   end
 
   describe "write_project_file/3" do

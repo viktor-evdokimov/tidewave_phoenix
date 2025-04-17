@@ -163,7 +163,7 @@ defmodule Tidewave.MCP.Tools.FS do
   def read_project_file(args, state) do
     case args do
       %{"path" => path} ->
-        with {:ok, content} <- get_file_content(path) do
+        with {:ok, content} <- get_file_content(path, !args["raw"]) do
           stat = File.stat!(path)
 
           state =
@@ -297,7 +297,7 @@ defmodule Tidewave.MCP.Tools.FS do
   # Maximum file size for reading (256KB)
   @max_file_size 262_144
 
-  defp get_file_content(path) do
+  defp get_file_content(path, truncate?) do
     with {:ok, path} <- safe_path(path) do
       case File.stat(path) do
         {:ok, %{size: size}} when size > @max_file_size ->
@@ -308,7 +308,7 @@ defmodule Tidewave.MCP.Tools.FS do
           content = File.read!(path)
 
           if String.valid?(content) do
-            {:ok, Utils.truncate_lines(content)}
+            {:ok, if(truncate?, do: Utils.truncate_lines(content), else: content)}
           else
             {:error, "Cannot read file, because it contains invalid UTF-8 characters"}
           end
