@@ -10,7 +10,7 @@ defmodule Tidewave.MCP.UtilsTest do
     end
   end
 
-  describe "detect_line_endings/1" do
+  describe "detect_file_line_endings/1" do
     @describetag :tmp_dir
 
     setup %{tmp_dir: tmp_dir} do
@@ -30,10 +30,10 @@ defmodule Tidewave.MCP.UtilsTest do
       crlf_file: crlf_file,
       mixed_file: mixed_file
     } do
-      assert :lf = Utils.detect_line_endings(lf_file)
-      assert :crlf = Utils.detect_line_endings(crlf_file)
+      assert :lf = Utils.detect_file_line_endings(lf_file)
+      assert :crlf = Utils.detect_file_line_endings(crlf_file)
       # when equal, line feed wins
-      assert :lf = Utils.detect_line_endings(mixed_file)
+      assert :lf = Utils.detect_file_line_endings(mixed_file)
     end
   end
 end

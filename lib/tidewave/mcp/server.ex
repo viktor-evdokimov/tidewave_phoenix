@@ -49,7 +49,9 @@ defmodule Tidewave.MCP.Server do
     end
 
     for tool <- tools, listable?.(tool) do
-      Map.drop(tool, [:callback, :listable])
+      tool
+      |> Map.put(:description, String.trim(tool.description))
+      |> Map.drop([:callback, :listable])
     end
   end
 

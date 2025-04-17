@@ -97,6 +97,24 @@ defmodule Tidewave.MCP.Tools.FSTest do
       refute read_content =~ "b [100 characters truncated] ..."
       assert length(:binary.matches(read_content, ["a", "b"])) == 4200
     end
+
+    test "can read from line_offset and limit to count", %{tmp_dir: tmp_dir} do
+      file_path = Path.join(tmp_dir, "offset_test.txt")
+      content = Enum.map_join(1..1000, "\n", &to_string/1) <> "\nmore content\n"
+      File.write!(file_path, content)
+
+      assert {:ok, "1\n2\n3\n4\n5\n6", _state} =
+               FS.read_project_file(%{"path" => file_path, "count" => 6}, %{})
+
+      assert {:ok, "501\n502\n503\n504\n505", _state} =
+               FS.read_project_file(
+                 %{"path" => file_path, "line_offset" => 500, "count" => 5},
+                 %{}
+               )
+
+      assert {:ok, "991\n992\n993\n994\n995\n996\n997\n998\n999\n1000\nmore content\n", _state} =
+               FS.read_project_file(%{"path" => file_path, "line_offset" => 990}, %{})
+    end
   end
 
   describe "write_project_file/3" do
