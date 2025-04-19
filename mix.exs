@@ -31,7 +31,8 @@ defmodule Tidewave.MixProject do
       {:circular_buffer, "~> 0.4"},
       {:req, "~> 0.5"},
       {:bandit, "~> 1.6", only: :test},
-      {:ex_doc, ">= 0.0.0", only: :docs}
+      {:ex_doc, ">= 0.0.0", only: :docs},
+      {:makeup_json, ">= 0.0.0", only: :docs}
     ]
   end
 

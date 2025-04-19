@@ -17,7 +17,7 @@ The proxy will be installed at `~/.mix/escripts/mcp-proxy`.
 It is recommended that you add `~/.mix/escripts` to your
 [`$PATH`](https://en.wikipedia.org/wiki/PATH_(variable)).
 If you don't, you will need to specify the full path to
-the `mcp_proxy` script.
+the `mcp-proxy` executable.
 
 ## Python-based proxy
 
