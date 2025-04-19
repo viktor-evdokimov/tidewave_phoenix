@@ -40,11 +40,13 @@ defmodule Tidewave.MixProject do
       api_reference: false,
       main: "installation",
       logo: "logo.svg",
+      assets: %{"pages/assets" => "assets"},
       extras: [
         "pages/installation.md",
         "pages/editors/mcp.md",
         "pages/editors/claude.md",
         "pages/editors/cursor.md",
+        "pages/editors/vscode.md",
         "pages/editors/windsurf.md",
         "pages/editors/zed.md",
         "pages/guides/mcp_proxy.md",
