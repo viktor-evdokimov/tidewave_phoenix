@@ -14,17 +14,17 @@ defmodule Tidewave.MCP.Tools.PhoenixTest do
 
       assert is_list(tools)
       assert length(tools) == 1
-      assert Enum.any?(tools, &(&1.name == "list_liveview_channels"))
+      assert Enum.any?(tools, &(&1.name == "list_liveview_pages"))
     end
   end
 
-  describe "list_liveview_channels/1" do
+  describe "list_liveview_pages/1" do
     test "returns a formatted list of LiveView channels" do
       # The actual implementation depends on running LiveView processes
       # which is difficult to test, so we'll just verify the function runs
       # and returns the expected format
       assert {:ok, "There are no LiveView processes connected!"} =
-               Phoenix.list_liveview_channels(%{})
+               Phoenix.list_liveview_pages(%{})
 
       parent = self()
 
@@ -47,7 +47,7 @@ defmodule Tidewave.MCP.Tools.PhoenixTest do
           {:ready, lv_pid} -> lv_pid
         end
 
-      {:ok, text} = Phoenix.list_liveview_channels(%{})
+      {:ok, text} = Phoenix.list_liveview_pages(%{})
 
       assert text =~ inspect(lv_pid)
       assert text =~ "view: Tidewave.MCP.Tools.PhoenixTest"

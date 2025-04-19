@@ -4,24 +4,24 @@ defmodule Tidewave.MCP.Tools.Phoenix do
   def tools do
     [
       %{
-        name: "list_liveview_channels",
+        name: "list_liveview_pages",
         description: """
         Returns a list of currently connected LiveViews.
 
         Use this tool if the project is using Phoenix LiveView and a user talks about something
-        that is happening in the current LiveView.
+        that is happening in the current page or the current LiveView.
         """,
         inputSchema: %{
           type: "object",
           properties: %{},
           required: []
         },
-        callback: &list_liveview_channels/1
+        callback: &list_liveview_pages/1
       }
     ]
   end
 
-  def list_liveview_channels(_args) do
+  def list_liveview_pages(_args) do
     liveviews =
       for process <- Process.list(),
           result = liveview_process?(process),
@@ -71,7 +71,7 @@ defmodule Tidewave.MCP.Tools.Phoenix do
   defp liveview_initial_call?(_), do: false
 
   defp extract_liveview_info(pid, nil) do
-    info = Process.info(pid, [:registered_name, :message_queue_len, :memory])
+    info = Process.info(pid, [:message_queue_len, :memory])
 
     %{
       pid: inspect(pid),
@@ -83,14 +83,13 @@ defmodule Tidewave.MCP.Tools.Phoenix do
   end
 
   defp extract_liveview_info(pid, state) do
-    info = Process.info(pid, [:registered_name, :message_queue_len, :memory])
+    info = Process.info(pid, [:message_queue_len, :memory])
     socket = state.socket
     assigns = socket.assigns || %{}
     view = socket.view
 
     %{
       pid: inspect(pid),
-      registered_name: info[:registered_name] || nil,
       view: view,
       live_action: is_map(assigns) && assigns[:live_action],
       module: view,
