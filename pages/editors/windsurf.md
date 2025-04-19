@@ -23,4 +23,4 @@ Note the above assumes the `mcp-proxy` is available on your `$PATH`,
 otherwise you must give the full path to the installed executable.
 
 And you are good to go! Now Windsurf will list all tools from Tidewave
-available.
+available. If you have any questions, check out [Windsurf official docs](https://docs.windsurf.com/windsurf/mcp#configuring-mcp).

@@ -9,12 +9,13 @@ Zed agents/assistants are currently in beta and the steps below may not be
 Once that's done, open up the Assistant tab and click on the `⋯` icon at the
 top right (see image below):
 
-![Zed AI panel](assets/vscode.png)
+![Zed AI panel](assets/zed.png)
 
 In the new pane, select "+ Add MCPs Directly", to open a new dialog. Fill in
 the name of your choice and the command is the path to your MCP proxy followed
 by space and the web server location such as:
 
-    mcp-proxy http://localhost:4000/tidewave/mcp
+    mcp-proxy http://localhost:$PORT/tidewave/mcp
 
-And you are good to go! Now Zed will list all tools from Tidewave available.
+Where `$PORT` is the port it is running on and you are good to go!
+Now Zed will list all tools from Tidewave available.
