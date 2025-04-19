@@ -10,7 +10,7 @@ You can integrate Tidewave into any editor or AI assistant that supports the Mod
 
 For any other editor/assistant, you need to include Tidewave as MCP of type "sse", pointing to the `/tidewave/mcp` path of port your web application is running on. For example, `http://localhost:4000/tidewave/mcp`.
 
-In case your tool of choice does not support "sse" servers, only "io" ones, you can use one of the many available [MCP proxies](mcp_proxy.md).
+In case your tool of choice does not support "sse" servers, only "io" ones, you can use one of the many available [MCP proxies](../guides/mcp_proxy.md).
 
 ## Available tools
 

@@ -9,4 +9,4 @@ Tidewave is available for the following frameworks:
   * Tidewave for Phoenix - [Installation](https://github.com/tidewave-ai/tidewave_phoenix)
   * Tidewave for Rails - [Installation](https://github.com/tidewave-ai/tidewave_rails)
 
-Once you add Tidewave to your web application, you can connect to it from your editor and AI assistants, [see the docs](mcp.md).
+Once you add Tidewave to your web application, you can connect to it from your editor and AI assistants, [see the docs](editors/mcp.md).

@@ -4,7 +4,7 @@
 
 TODO.
 
-In order to use Tidewave with Claude Desktop, you must first install a [`mcp_proxy`](mcp_proxy.md).
+In order to use Tidewave with Claude Desktop, you must first install a [`mcp_proxy`](../guides/mcp_proxy.md).
 
 Then your Claude Desktop configuration looks like this:
 
