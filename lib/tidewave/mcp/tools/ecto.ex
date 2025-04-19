@@ -29,7 +29,7 @@ defmodule Tidewave.MCP.Tools.Ecto do
           """,
           inputSchema: %{
             type: "object",
-            required: ["query", "arguments"],
+            required: ["query"],
             properties: %{
               repo: %{
                 type: "string",
@@ -54,7 +54,8 @@ defmodule Tidewave.MCP.Tools.Ecto do
               arguments: %{
                 type: "array",
                 description:
-                  "The arguments to pass to the query. The query must contain corresponding parameters."
+                  "The arguments to pass to the query. The query must contain corresponding parameters.",
+                items: %{}
               }
             }
           },
@@ -81,40 +82,35 @@ defmodule Tidewave.MCP.Tools.Ecto do
     end
   end
 
-  def execute_sql_query(args) do
-    case args do
-      %{"query" => query, "arguments" => arguments} ->
-        repo =
-          case args["repo"] do
-            nil ->
-              List.first(ecto_repos())
+  def execute_sql_query(%{"query" => query} = args) do
+    repo =
+      case args["repo"] do
+        nil -> List.first(ecto_repos())
+        repo -> Module.concat([repo])
+      end
 
-            repo ->
-              Module.concat([repo])
+    limit = 50
+
+    case repo.query(query, args["arguments"] || []) do
+      {:ok, result} ->
+        preamble =
+          case result do
+            %{num_rows: num_rows} when num_rows > limit ->
+              "Query returned #{num_rows} rows. Only the first #{limit} rows are included in the result. Use LIMIT + OFFSET in your query to show more rows if applicable.\n\n"
+
+            _ ->
+              ""
           end
 
-        limit = 50
+        {:ok, preamble <> inspect(result, limit: limit, pretty: true)}
 
-        case repo.query(query, arguments) do
-          {:ok, result} ->
-            preamble =
-              case result do
-                %{num_rows: num_rows} when num_rows > limit ->
-                  "Query returned #{num_rows} rows. Only the first #{limit} rows are included in the result. Use LIMIT + OFFSET in your query to show more rows if applicable.\n\n"
-
-                _ ->
-                  ""
-              end
-
-            {:ok, preamble <> inspect(result, limit: limit, pretty: true)}
-
-          {:error, reason} ->
-            {:error, "Failed to execute query: #{inspect(reason)}"}
-        end
-
-      _ ->
-        {:error, :invalid_arguments}
+      {:error, reason} ->
+        {:error, "Failed to execute query: #{inspect(reason)}"}
     end
+  end
+
+  def execute_sql_query(_) do
+    {:error, :invalid_arguments}
   end
 
   def get_ecto_schemas(_args) do
