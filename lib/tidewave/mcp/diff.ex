@@ -39,8 +39,8 @@ defmodule Tidewave.MCP.Diff do
     context = Keyword.get(opts, :context, @default_context)
     collapse = Keyword.get(opts, :collapse, true)
 
-    old_lines = String.split(old, "\n")
-    new_lines = String.split(new, "\n")
+    old_lines = String.split(old, ["\r\n", "\n"])
+    new_lines = String.split(new, ["\r\n", "\n"])
 
     # First generate a raw diff with all lines
     raw_diff = do_diff(old_lines, new_lines)
