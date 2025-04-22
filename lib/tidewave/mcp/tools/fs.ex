@@ -2,8 +2,7 @@ defmodule Tidewave.MCP.Tools.FS do
   @moduledoc false
 
   alias Tidewave.MCP
-  alias Tidewave.MCP.GitLS
-  alias Tidewave.MCP.Utils
+  alias Tidewave.MCP.{GitLS, Diff, Utils}
 
   def ripgrep_executable, do: System.find_executable("rg")
 
@@ -217,7 +216,7 @@ defmodule Tidewave.MCP.Tools.FS do
 
         with {:ok, path} <- safe_path(path),
              :ok <- check_stale(path, read_timestamps, true) do
-          do_write_file(path, content, state)
+          do_write_file(path, content, state, args["diff_only"] != nil)
         end
 
       _ ->
@@ -238,7 +237,7 @@ defmodule Tidewave.MCP.Tools.FS do
              old_content = File.read!(path),
              :ok <- ensure_one_match(old_content, old_string) do
           new_content = String.replace(old_content, old_string, new_string)
-          do_write_file(path, new_content, state)
+          do_write_file(path, new_content, state, args["diff_only"] != nil)
         end
 
       _ ->
@@ -260,7 +259,7 @@ defmodule Tidewave.MCP.Tools.FS do
     end
   end
 
-  defp do_write_file(path, content, state) do
+  defp do_write_file(path, content, state, diff_only?) do
     state = ensure_default_line_endings(state)
 
     content =
@@ -269,17 +268,29 @@ defmodule Tidewave.MCP.Tools.FS do
         :lf -> content
       end
 
-    File.mkdir_p!(Path.dirname(path))
-
     try do
       content = maybe_autoformat(state, path, content)
-      File.write!(path, content)
-      stat = File.stat!(path)
 
-      state =
-        Map.update(state, :read_timestamps, %{path => stat.mtime}, &Map.put(&1, path, stat.mtime))
+      if diff_only? do
+        before = File.read!(path)
+        diff = Diff.diff(before, content)
 
-      {:ok, "Success!", state}
+        {:ok, diff, state}
+      else
+        File.mkdir_p!(Path.dirname(path))
+        File.write!(path, content)
+        stat = File.stat!(path)
+
+        state =
+          Map.update(
+            state,
+            :read_timestamps,
+            %{path => stat.mtime},
+            &Map.put(&1, path, stat.mtime)
+          )
+
+        {:ok, "Success!", state}
+      end
     rescue
       e -> {:error, "Failed to format file: #{Exception.format(:error, e, __STACKTRACE__)}"}
     end

@@ -226,6 +226,24 @@ defmodule Tidewave.MCP.Tools.FSTest do
 
       assert File.read!(path) == content
     end
+
+    test "supports hidden diff_only mode", %{path: path} do
+      File.write!(path, "Hello, world!")
+
+      assert {:ok, diff, %{read_timestamps: %{^path => _}}} =
+               FS.write_project_file(
+                 %{"path" => path, "content" => "Hello, José!", "diff_only" => true},
+                 %{read_timestamps: %{path => File.stat!(path).mtime}}
+               )
+
+      assert diff === """
+             + Hello, José!
+             - Hello, world!\
+             """
+
+      # file is not modified
+      assert File.read!(path) == "Hello, world!"
+    end
   end
 
   describe "edit_project_file/3" do
@@ -337,6 +355,29 @@ defmodule Tidewave.MCP.Tools.FSTest do
                )
 
       assert message =~ "invalid or not relative to the project root"
+    end
+
+    test "supports hidden diff_only mode", %{path: path} do
+      File.write!(path, "Hello, world!")
+
+      assert {:ok, diff, %{read_timestamps: %{^path => _}}} =
+               FS.edit_project_file(
+                 %{
+                   "path" => path,
+                   "old_string" => "Hello",
+                   "new_string" => "Bonjour",
+                   "diff_only" => true
+                 },
+                 %{read_timestamps: %{path => File.stat!(path).mtime}}
+               )
+
+      assert diff === """
+             + Bonjour, world!
+             - Hello, world!\
+             """
+
+      # file is not modified
+      assert File.read!(path) == "Hello, world!"
     end
   end
 end
