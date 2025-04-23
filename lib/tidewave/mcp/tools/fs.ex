@@ -24,8 +24,10 @@ defmodule Tidewave.MCP.Tools.FS do
       },
       %{
         name: "read_project_file",
-        description:
-          "Returns the contents of the given file. Matches the resources/read MCP method.",
+        description: """
+        Returns the contents of the given file.
+        Supports an optional line_offset and count. To read the full file, only the path needs to be passed.
+        """,
         inputSchema: %{
           type: "object",
           required: ["path"],
@@ -33,6 +35,14 @@ defmodule Tidewave.MCP.Tools.FS do
             path: %{
               type: "string",
               description: "The path to the file to read. It is relative to the project root."
+            },
+            line_offset: %{
+              type: "integer",
+              description: "Optional: the starting line offset from which to read. Defaults to 0."
+            },
+            count: %{
+              type: "integer",
+              description: "Optional: the number of lines to read. Defaults to all."
             }
           }
         },
@@ -163,7 +173,10 @@ defmodule Tidewave.MCP.Tools.FS do
   def read_project_file(args, state) do
     case args do
       %{"path" => path} ->
-        with {:ok, content} <- get_file_content(path, !args["raw"]) do
+        line_offset = Map.get(args, "line_offset", 0)
+        count = Map.get(args, "count")
+
+        with {:ok, content} <- get_file_content(path, line_offset, count, !args["raw"]) do
           stat = File.stat!(path)
 
           state =
@@ -264,7 +277,7 @@ defmodule Tidewave.MCP.Tools.FS do
     state = ensure_default_line_endings(state)
 
     content =
-      case Utils.detect_line_endings(path) || state.default_line_endings do
+      case Utils.detect_file_line_endings(path) || state.default_line_endings do
         :crlf -> String.replace(content, ["\r\n", "\n"], "\r\n")
         :lf -> content
       end
@@ -297,7 +310,7 @@ defmodule Tidewave.MCP.Tools.FS do
   # Maximum file size for reading (256KB)
   @max_file_size 262_144
 
-  defp get_file_content(path, truncate?) do
+  defp get_file_content(path, offset, count, truncate?) do
     with {:ok, path} <- safe_path(path) do
       case File.stat(path) do
         {:ok, %{size: size}} when size > @max_file_size ->
@@ -308,6 +321,8 @@ defmodule Tidewave.MCP.Tools.FS do
           content = File.read!(path)
 
           if String.valid?(content) do
+            content = maybe_apply_offset_and_count(content, offset, count)
+
             {:ok, if(truncate?, do: Utils.truncate_lines(content), else: content)}
           else
             {:error, "Cannot read file, because it contains invalid UTF-8 characters"}
@@ -324,6 +339,26 @@ defmodule Tidewave.MCP.Tools.FS do
       end
     end
   end
+
+  defp maybe_apply_offset_and_count(content, 0, nil), do: content
+
+  defp maybe_apply_offset_and_count(content, offset, count) do
+    splitter_and_joiner =
+      case Utils.detect_line_endings(content) do
+        :lf -> "\n"
+        :crlf -> "\r\n"
+      end
+
+    lines = String.split(content, splitter_and_joiner)
+
+    lines
+    |> Enum.drop(offset)
+    |> take_all_or(count)
+    |> Enum.join(splitter_and_joiner)
+  end
+
+  defp take_all_or(list, nil), do: list
+  defp take_all_or(list, count), do: Enum.take(list, count)
 
   @doc """
   Searches for files matching a glob pattern.

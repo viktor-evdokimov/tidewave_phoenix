@@ -20,19 +20,23 @@ defmodule Tidewave.MCP.Utils do
     end
   end
 
-  def detect_line_endings(path) do
+  def detect_file_line_endings(path) do
     case File.read(path) do
       {:ok, content} ->
-        {lf_count, crlf_count} = detect_line_endings(content, 0, 0)
-
-        if crlf_count > lf_count do
-          :crlf
-        else
-          :lf
-        end
+        detect_line_endings(content)
 
       _ ->
         nil
+    end
+  end
+
+  def detect_line_endings(content) do
+    {lf_count, crlf_count} = detect_line_endings(content, 0, 0)
+
+    if crlf_count > lf_count do
+      :crlf
+    else
+      :lf
     end
   end
 
