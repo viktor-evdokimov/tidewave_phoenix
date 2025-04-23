@@ -55,7 +55,9 @@ defmodule Tidewave.MCP.Tools.Eval do
             }
           }
         },
-        callback: &shell_eval/1
+        callback: &shell_eval/1,
+        # for now, only include the shell tool if FS tools are also enabled
+        listable: fn connect_params -> not is_nil(connect_params["include_fs_tools"]) end
       }
     ]
   end

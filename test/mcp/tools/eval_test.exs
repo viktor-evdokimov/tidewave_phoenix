@@ -70,5 +70,12 @@ defmodule Tidewave.MCP.Tools.EvalTest do
 
       assert message =~ "Command failed with status"
     end
+
+    test "is only listable if include_fs_tools is set" do
+      {tools, _} = Tidewave.MCP.Server.tools_and_dispatch()
+      assert %{listable: fun} = Enum.find(tools, fn %{name: name} -> name == "shell_eval" end)
+      assert fun.(%{"include_fs_tools" => "true"})
+      refute fun.(%{"other" => "params"})
+    end
   end
 end

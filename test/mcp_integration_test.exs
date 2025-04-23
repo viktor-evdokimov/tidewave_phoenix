@@ -22,7 +22,11 @@ defmodule Tidewave.MCPIntegrationTest do
   test "does not include fs tools by default", %{request: request} do
     assert %{tools: tools} = request
     assert is_list(tools)
-    refute "list_project_files" in Enum.map(tools, & &1["name"])
+
+    tool_names = Enum.map(tools, & &1["name"])
+
+    refute "list_project_files" in tool_names
+    refute "shell_eval" in tool_names
   end
 
   test "connects to SSE endpoint and receives tools on initialize", %{request: request} do
