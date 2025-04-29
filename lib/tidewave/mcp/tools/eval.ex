@@ -28,6 +28,13 @@ defmodule Tidewave.MCP.Tools.Eval do
             code: %{
               type: "string",
               description: "The Elixir code to evaluate."
+            },
+            timeout: %{
+              type: "integer",
+              description: """
+              Optional. A timeout in milliseconds after which the execution stops if it did not finish yet.
+              Defaults to 30000 (30 seconds).
+              """
             }
           }
         },
@@ -69,22 +76,56 @@ defmodule Tidewave.MCP.Tools.Eval do
   """
   def project_eval(args) do
     case args do
-      %{"code" => code} ->
-        result =
-          case capture_io(fn ->
-                 {result, _bindings} = Code.eval_string(code, [], env())
-                 result
-               end) do
-            # this is returned by IEx helpers
-            {:"do not show this result in output", io} -> io
-            {result, ""} -> result
-            {result, io} -> %{result: result, io: io}
-          end
+      %{"code" => code} -> eval_code(code, Map.get(args, "timeout", 30_000))
+      _ -> {:error, :invalid_arguments}
+    end
+  end
 
-        {:ok, inspect(result, limit: :infinity, printable_limit: :infinity, pretty: true)}
+  defp eval_code(code, timeout) do
+    parent = self()
 
-      _ ->
-        {:error, :invalid_arguments}
+    {pid, ref} =
+      spawn_monitor(fn ->
+        # we need to set the logger metadata again
+        Logger.metadata(tidewave_mcp: true)
+        send(parent, {:result, eval_with_captured_io(code)})
+      end)
+
+    receive do
+      {:result, result} ->
+        {:ok, result}
+
+      {:DOWN, ^ref, :process, ^pid, reason} ->
+        {:error,
+         "Failed to evaluate code. Process exited with reason: #{Exception.format_exit(reason)}"}
+    after
+      timeout ->
+        Process.demonitor(ref, [:flush])
+        Process.exit(pid, :brutal_kill)
+        {:error, "Evaluation timed out after #{timeout} milliseconds."}
+    end
+  end
+
+  defp eval_with_captured_io(code) do
+    result =
+      capture_io(fn ->
+        try do
+          {result, _bindings} = Code.eval_string(code, [], env())
+          result
+        catch
+          kind, reason -> Exception.format(kind, reason, __STACKTRACE__)
+        end
+      end)
+
+    inspect_all = fn i ->
+      inspect(i, limit: :infinity, printable_limit: :infinity, pretty: true)
+    end
+
+    case result do
+      # this is returned by IEx helpers
+      {:"do not show this result in output", io} -> io
+      {result, ""} -> inspect_all.(result)
+      {result, io} -> "IO:\n\n#{io}\n\nResult:\n\n#{inspect_all.(result)}"
     end
   end
 
