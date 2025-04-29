@@ -8,6 +8,7 @@ defmodule Tidewave.MixProject do
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      package: package(),
 
       # Docs
       name: "Tidewave",
@@ -21,6 +22,15 @@ defmodule Tidewave.MixProject do
     [
       mod: {Tidewave.Application, []},
       extra_applications: [:logger]
+    ]
+  end
+
+  defp package do
+    [
+      description: "Tidewave for Phoenix",
+      maintainers: ["Steffen Deusch"],
+      licenses: ["Apache-2.0"],
+      links: %{"Tidewave" => "https://tidewave.ai"}
     ]
   end
 
