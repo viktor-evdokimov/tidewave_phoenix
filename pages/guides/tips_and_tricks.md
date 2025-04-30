@@ -2,6 +2,19 @@
 
 Some tips and tricks to use Tidewave and AI assistants and agents effectively.
 
+## Be specific
+
+AI assistants are not very different from working with your teammates.
+If you give specific instructions, it is more likely they will deliver
+exactly what you asked. However, if you are vague, they may try things
+completely different from what you had in mind, sometimes surprising you,
+othertimes leading to work that will have to be discarded.
+
+When it comes to using Tidewave, if you are expecting it to use a particular
+tool, be specific about it. Say use `project_eval` to validate some API
+or to execute a given query using `execute_sql_query`. The listing of all
+tools are available [in the MCP page](../editors/mcp.md).
+
 ## Configure your prompts
 
 Most editors and AI assistants allow you to write down a file that
@@ -20,9 +33,10 @@ Write tests for your changes and run `mix test` afterwards.
 ## Use eval: AI's swiss army knife
 
 AI assistants excel at coding. Since Tidewave can evaluate code within your
-project, as well as execute commands in the terminal, you can ask the AI
-to execute complex tasks through Tidewave's eval without a need for additional
-tooling. With Tidewave, you can:
+project (using the `project_eval` tool), as well as execute commands in the
+terminal (using `shell_eval`), you can ask the AI to execute complex tasks
+through Tidewave's eval without a need for additional tooling. With Tidewave,
+you can:
 
   * evaluate code within the project context
   * execute commands in the terminal
@@ -32,7 +46,8 @@ This direct integration streamlines your workflow and keeps everything within
 your existing development environment. For example, you no longer need to use
 a separate tool to connect to your database, you can either execute SQL queries
 directly or ask the agent to use your models and data schemas to load the data
-in a more structured format.
+in a more structured format. In this case, remember to be precise and don't shy
+away from telling the exact tool it should use.
 
 Similarly, any API that your application talks to is automatically available
 to agents, which can leverage your established authentication methods and
