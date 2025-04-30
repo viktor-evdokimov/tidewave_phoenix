@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.2 (2025-04-30)
+
+* Enhancements
+  * Perform code reloading on shell eval
+  * Support new versions of the MCP standard
+  * Refute to use `iex` on `shell_eval`
+  * Improve `shell_eval` description
+  * Allow ipv4 mapped ipv6 address for `127.0.0.1`
+
 ## 0.1.1 (2025-04-30)
 
 * Enhancements
