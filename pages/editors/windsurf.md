@@ -79,4 +79,6 @@ and `$PORT` by the port your web application is running on.
 <!-- tabs-close -->
 
 And you are good to go! Now Windsurf will list all tools from Tidewave
-available. If you have any questions, check out [Windsurf official docs](https://docs.windsurf.com/windsurf/mcp#configuring-mcp).
+available. If your application uses a SQL database, you can verify it
+all works by asking it to run `SELECT 1` as database query.
+If you have any questions, check out [Windsurf official docs](https://docs.windsurf.com/windsurf/mcp#configuring-mcp).

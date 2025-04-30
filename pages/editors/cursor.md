@@ -26,4 +26,6 @@ assistant tab and click on the `⋯` icon on the top right and
 choose "Chat Settings". In the new window that opens, you can
 click "MCP" on the sidebar and follow the steps there.
 
+If your application uses a SQL database, you can verify it all works
+by asking it to run `SELECT 1` as database query.
 If you have any questions, check out [Cursor official docs](https://docs.cursor.com/context/model-context-protocol).

@@ -23,4 +23,5 @@ And then at the center top:
 4. Add a name of your choice
 
 And you are good to go! Now the Copilot extension will list all tools from
-Tidewave available.
+Tidewave available. If your application uses a SQL database, you can verify
+it all works by asking it to run `SELECT 1` as database query.
