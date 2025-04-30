@@ -50,8 +50,8 @@ defmodule Tidewave.MCP.Tools.Eval do
 
         The operating system is of flavor `#{inspect(:os.type())}`.
 
-        Avoid using this tool for file operations. Instead, rely on
-        dedicated file system tools, if available.
+        Avoid using this tool for manipulating project files.
+        Instead rely on the tools with the name ending on `*_project_files`.
 
         Do not use this tool to evaluate Elixir code. Use `project_eval` instead.
         Only use this tool if other means are not available.
