@@ -11,7 +11,7 @@ top right (see image below):
 
 ![Zed AI panel](assets/zed.png)
 
-In the new pane, select "+ Add MCPs Directly", to open a new dialog. Fill in
+In the new pane, select "+ Add Custom Server", to open a new dialog. Fill in
 the name of your choice and the command will vary depending to your proxy
 of choice:
 
@@ -54,4 +54,5 @@ and `$PORT` by the port your web application is running on.
 
 And you are good to go! Now Zed will list all tools from Tidewave available.
 If your application uses a SQL database, you can verify it all works by asking
-it to run `SELECT 1` as database query.
+it to run `SELECT 1` as database query. If you want to manage your installation,
+you can click on the same `⋯` icon and then on "Settings".
