@@ -12,14 +12,16 @@ defmodule Tidewave.MCP.Tools.Eval do
 
         The current Elixir version is: #{System.version()}
 
-        Includes IEx helpers in the evaluation context. Thus, to get documentation for a module or function,
-        use this tool and execute the `h` helper, for example:
+        Use this tool every time you need to evaluate Elixir code,
+        including to test the behaviour of a function or to debug
+        something. The tool also returns anything written to standard
+        output. DO NOT use shell tools to evaluate Elixir code.
+
+        It also includes IEx helpers in the evaluation context. Thus,
+        to get documentation for a module or function, use this tool
+        and execute the `h` helper, for example:
 
         h Enum.map/2
-
-        The code is executed in the context of the user's project, therefore use this tool any
-        time you need to evaluate code, for example to test the behavior of a function or to debug
-        something. The tool also returns anything written to standard output.
         """,
         inputSchema: %{
           type: "object",
@@ -50,7 +52,7 @@ defmodule Tidewave.MCP.Tools.Eval do
         Avoid using this tool for file operations. Instead, rely on
         dedicated file system tools, if available.
 
-        Do not use this tool to evaluate Elixir code. Use `project_eval` instead.        
+        Do not use this tool to evaluate Elixir code. Use `project_eval` instead.
         Only use this tool if other means are not available.
         """,
         inputSchema: %{
