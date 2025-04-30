@@ -4,7 +4,7 @@ defmodule Tidewave.MixProject do
   def project do
     [
       app: :tidewave,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -62,7 +62,8 @@ defmodule Tidewave.MixProject do
         "pages/editors/zed.md",
         "pages/guides/mcp_proxy.md",
         "pages/guides/security.md",
-        "pages/guides/tips_and_tricks.md"
+        "pages/guides/tips_and_tricks.md",
+        "CHANGELOG.md"
       ],
       groups_for_extras: [
         "Editors & Assistants": ~r/pages\/editors\/.?/,
