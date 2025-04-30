@@ -54,6 +54,11 @@ defmodule Tidewave.MCP.Tools.Eval do
         Instead rely on the tools with the name matching `*_project_files`.
 
         Do not use this tool to evaluate Elixir code. Use `project_eval` instead.
+
+        Do not use this tool for commands that run indefinitely,
+        such as servers (like `mix phx.server` or `npm run dev`),
+        REPLs (`iex`) or file watchers.
+
         Only use this tool if other means are not available.
         """,
         inputSchema: %{
