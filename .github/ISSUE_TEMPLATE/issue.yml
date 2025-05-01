@@ -6,18 +6,16 @@ body:
     id: mcp-client
     attributes:
       label: Is your issue related to a particular editor or MCP client?
-      description: Tell us which one.
 
   - type: input
     id: mcp-proxy
     attributes:
       label: Are you using a MCP Proxy?
-      description: Tell us which one.
 
   - type: input
     id: tidewave-version
     attributes:
-      label: Which version of Tidewave are you using?
+      label: What is your Tidewave version?
     validations:
       required: true
 
@@ -29,6 +27,7 @@ body:
         Include code samples, errors, and stacktraces if appropriate.
 
         If reporting a bug, please include the reproducing steps.
+
         If using an editor or MCP client, include your configuration.
     validations:
       required: true
