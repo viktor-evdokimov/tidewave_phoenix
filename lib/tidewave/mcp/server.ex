@@ -124,12 +124,9 @@ defmodule Tidewave.MCP.Server do
     result_or_error(request_id, {:ok, %{tools: tools(Connection.connect_params(state_pid))}})
   end
 
-  def handle_call_tool(request_id, %{"name" => name, "arguments" => args}, state_pid) do
+  def handle_call_tool(request_id, %{"name" => name} = params, state_pid) do
+    args = Map.get(params, "arguments", %{})
     result_or_error(request_id, dispatch(name, args, state_pid))
-  end
-
-  def handle_call_tool(request_id, %{"name" => name}, state_pid) do
-    result_or_error(request_id, dispatch(name, %{}, state_pid))
   end
 
   defp result_or_error(request_id, {:ok, text}) when is_binary(text) do

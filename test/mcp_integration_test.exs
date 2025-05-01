@@ -189,6 +189,25 @@ defmodule Tidewave.MCPIntegrationTest do
            } = receive_sse_message(resp)
   end
 
+  test "does not expect arguments to be given", %{request: request} do
+    assert %{resp: resp, endpoint_url: endpoint_url} = request
+    id = System.unique_integer([:positive])
+
+    send_message(endpoint_url, %{
+      "jsonrpc" => "2.0",
+      "id" => id,
+      "method" => "tools/call",
+      "params" => %{"name" => "list_project_files"}
+    })
+
+    assert %{
+             data: %{
+               "id" => ^id,
+               "result" => %{}
+             }
+           } = receive_sse_message(resp)
+  end
+
   ### helpers
 
   defp connect_and_initialize(base_url) do
