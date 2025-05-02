@@ -23,7 +23,7 @@ document your project's best practices, workflows, and pitfalls.
 Keep this file short and to the point. For example, a Phoenix
 application may write:
 
-```
+```text
 This is a Phoenix application, which uses Tailwind and daisyUI.
 Prefer using LiveView instead of regular Controllers.
 Once you are done with changes, run `mix compile` and fix any issues.
