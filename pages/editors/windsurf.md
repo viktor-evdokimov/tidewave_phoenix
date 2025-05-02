@@ -78,7 +78,7 @@ and `$PORT` by the port your web application is running on.
 
 ### SSE connection
 
-Note, if you restart your dev server, you will need to refresh the MCP connection. 
+Windsurf also supports MCP servers through SSE:
 
 ```json
 {
@@ -89,6 +89,8 @@ Note, if you restart your dev server, you will need to refresh the MCP connectio
   }
 }
 ```
+
+Note, if you restart your dev server, you will need to refresh the MCP connection.
 
 <!-- tabs-close -->
 
