@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.4 (2025-05-02)
+
+* Enhancements
+  * ensure Hex dependency search tool only returns package name and version to
+    prevent prompt injections from package descriptions
+  * make `:inspect_opts` configurable and format charlists as lists by default
+
 ## 0.1.3 (2025-05-01)
 
 * Enhancements
