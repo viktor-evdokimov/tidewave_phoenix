@@ -60,3 +60,13 @@ If the MCP proxy does not work, here is what you can try to debug it:
 ## Your editor
 
 Your editor and most MCP clients keep logs about their MCP tools. Remember to check those logs and try to find additional information which could help you debug connection issues. In particular, if you are using a proxy and you see "ENOENT" (or "enoent") in your logs, it is because the proxy cannot be found (or the user your running your editor does not have permission to access it).
+
+## Further help
+
+In case it still does not work, here are places you can get help to diagnose it:
+
+* [Our Discord server](https://discord.gg/5GhK7E54yA) - the best place to interact with the community and get help specific to your editor and framework
+
+* Our issues trackers - in case we messed something up, please let us know. Here are framework specific links:
+  * [Tidewave for Phoenix](https://github.com/tidewave-ai/tidewave_phoenix/issues)
+  * [Tidewave for Rails](https://github.com/tidewave-ai/tidewave_rails/issues)
