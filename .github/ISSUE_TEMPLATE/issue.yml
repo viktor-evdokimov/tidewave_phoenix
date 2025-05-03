@@ -1,10 +1,15 @@
 ---
-name: Report an editor/MCP client integration issue
-description: >
-  Tell us about something that is not working the way we (probably) intend.
+name: Editor/MCP client integration issue
+description: File a bug report related to Tidewave and your editor/MCP client
 
-  Don't forget to check out [our Troubleshooting guide](https://hexdocs.pm/tidewave/troubleshooting.html).
 body:
+  - type: markdown
+    attributes:
+      value: >
+        Thanks for taking the time to fill out this bug report.
+        Before moving forward, check out
+        [our Troubleshooting guide](https://hexdocs.pm/tidewave/troubleshooting.html).
+
   - type: input
     id: mcp-client
     attributes:
