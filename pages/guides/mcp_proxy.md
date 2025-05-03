@@ -1,4 +1,4 @@
-# MCP Proxy
+# MCP proxy
 
 Tidewave implements the SSE version of MCP protocol. Some tools may only support the IO
 protocol but proxies are available in different languages. Pick whatever language is more

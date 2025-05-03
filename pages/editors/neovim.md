@@ -21,3 +21,4 @@ Where `$PORT` is the port your web application is running on.
 
 And you are good to go! If your application uses SQL database, you can verify
 it works by asking CodeCompanion/Avante to run `SELECT 1` as database query.
+If it fails, check out [our Troubleshooting guide](troubleshooting.md).

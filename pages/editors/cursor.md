@@ -7,6 +7,7 @@ which is specific to your project. Given Tidewave is explicitly tied to your
 web application, that's our preferred approach.
 
 > #### Installing an MCP proxy {: .info}
+>
 > The SSE integration of Cursor has shown to be unreliable. Whenever the connection
 > drops to the SSE server, for example when you restart your dev server, Cursor does
 > not properly reconnect, leading to a frustrating user experience. For this reason,
@@ -90,7 +91,7 @@ and `$PORT` by the port your web application is running on.
 
 ### SSE connection
 
-Note: as mentioned above, we do not recommend this approach!
+As mentioned above, we do not recommend this approach at the moment.
 
 ```json
 {
@@ -115,4 +116,6 @@ click "MCP" on the sidebar and follow the steps there.
 
 If your application uses a SQL database, you can verify it all works
 by asking it to run `SELECT 1` as database query.
-If you have any questions, check out [Cursor official docs](https://docs.cursor.com/context/model-context-protocol).
+If it fails, check out [our Troubleshooting guide](troubleshooting.md)
+or [Cursor's official docs](https://docs.cursor.com/context/model-context-protocol).
+
