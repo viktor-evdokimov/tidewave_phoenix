@@ -64,7 +64,8 @@ defmodule Tidewave.MCP.Tools.HexTest do
             %{
               "name" => "phoenix",
               "description" => "Productive. Reliable. Fast.",
-              "latest_version" => "1.8.0"
+              "latest_version" => "1.8.0",
+              "downloads" => %{"all" => 123_456_789}
             }
           ]
         })
@@ -72,7 +73,13 @@ defmodule Tidewave.MCP.Tools.HexTest do
 
       assert {:ok, response} = Hex.package_search(%{"search" => "phoenix"})
       [phoenix] = Jason.decode!(response)
-      assert phoenix == %{"name" => "phoenix", "latest_version" => "1.8.0"}
+
+      assert phoenix == %{
+               "name" => "phoenix",
+               "version" => "1.8.0",
+               "downloads" => %{"all" => 123_456_789},
+               "documentation_uri" => "https://hexdocs.pm/phoenix/1.8.0"
+             }
     end
 
     test "includes sort parameter when provided" do

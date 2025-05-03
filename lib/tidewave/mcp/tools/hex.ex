@@ -161,7 +161,15 @@ defmodule Tidewave.MCP.Tools.Hex do
           {:ok, %{status: 200, body: %{"packages" => packages}}} ->
             {:ok,
              packages
-             |> Enum.map(&Map.take(&1, ["name", "latest_version"]))
+             |> Enum.map(fn
+               %{"name" => name, "latest_version" => version, "downloads" => downloads} ->
+                 %{
+                   name: name,
+                   version: version,
+                   downloads: downloads,
+                   documentation_uri: "https://hexdocs.pm/#{name}/#{version}"
+                 }
+             end)
              |> Jason.encode!()}
 
           {:ok, %{status: status, body: body}} ->
