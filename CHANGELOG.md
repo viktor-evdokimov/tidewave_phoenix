@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.5 (2025-05-07)
+
+* Enhancements
+  * capture compile errors in `project_eval` tool
+  * allow enabling debug logs with `config :tidewave, debug: true`
+  * use a single `reference` instead of separate `module` and `function` parameters in `get_source_location` tool
+
 ## 0.1.4 (2025-05-02)
 
 * Enhancements
