@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.6 (2025-05-08)
+
+* Bug fixes
+  * fix invalid schema definition for `get_source_location` tool
+
 ## 0.1.5 (2025-05-07)
 
 * Enhancements

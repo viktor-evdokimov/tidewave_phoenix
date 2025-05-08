@@ -6,17 +6,17 @@ defmodule Tidewave.MCP.Tools.Source do
       %{
         name: "get_source_location",
         description: """
-        Returns the source location for the given module (or function).
+        Returns the source location for the given reference.
 
         This works for modules in the current project, as well as dependencies,
         but not for modules included in Elixir itself.
 
-        This tool only works if you know the specific module (and optionally function) that is being targeted.
+        This tool only works if you know the `Module`, `Module.function`, or `Module.function/arity` that is being targeted.
         If that is the case, prefer this tool over grepping the file system.
         """,
         inputSchema: %{
           type: "object",
-          required: ["module"],
+          required: ["reference"],
           properties: %{
             reference: %{
               type: "string",
