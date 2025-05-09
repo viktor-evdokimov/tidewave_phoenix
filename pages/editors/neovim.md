@@ -9,11 +9,11 @@ With MCP Hub added, create a file at
 
 <!-- tabs-open -->
 
-### MCP Proxy
+### MCP Proxy (recommended)
 
 See the [MCP proxy documentation](guides/mcp_proxy.md).
 
-On macos/Linux:
+On macOS/Linux:
 
 ```json
 {

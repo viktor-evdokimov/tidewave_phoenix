@@ -9,9 +9,9 @@ manually add Tidewave:
 
 <!-- tabs-open -->
 
-### MCP Proxy
+### MCP Proxy (recommended)
 
-On macos/Linux:
+On macOS/Linux:
 
 ```json
 {

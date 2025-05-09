@@ -12,7 +12,7 @@ Then open up Claude Desktop, go to "Settings" and, under the
 you can open in your favorite editor. Which you must edit to
 include the following settings:
 
-On macos/Linux:
+On macOS/Linux:
 
 ```json
 {

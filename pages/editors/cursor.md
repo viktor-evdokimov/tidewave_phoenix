@@ -6,21 +6,13 @@ Cursor allows you to place a file at `.cursor/mcp.json`, for configuration
 which is specific to your project. Given Tidewave is explicitly tied to your
 web application, that's our preferred approach.
 
-> #### Installing an MCP proxy {: .info}
->
-> The SSE integration of Cursor has shown to be unreliable. Whenever the connection
-> drops to the SSE server, for example when you restart your dev server, Cursor does
-> not properly reconnect, leading to a frustrating user experience. For this reason,
-> we highly recommend to use an [MCP proxy](../guides/mcp_proxy.md), despite the built
-> in SSE support.
-
 Create a file at `.cursor/mcp.json` and add the following contents.
 
 <!-- tabs-open -->
 
-### MCP Proxy
+### MCP Proxy (recommended)
 
-On macos/Linux:
+On macOS/Linux:
 
 ```json
 {
@@ -54,7 +46,12 @@ Where `$PORT` is the port your web application is running on.
 
 ### SSE connection
 
-As mentioned above, we do not recommend this approach at the moment.
+> #### Installing an MCP proxy {: .warning}
+>
+> The SSE integration of Cursor has shown to be unreliable. Whenever the connection
+> drops to the SSE server, for example when you restart your dev server, Cursor does
+> not properly reconnect, leading to a frustrating user experience. For this reason,
+> we highly recommend to using the MCP proxy despite the built in SSE support.
 
 ```json
 {
