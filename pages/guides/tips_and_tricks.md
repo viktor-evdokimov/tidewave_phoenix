@@ -30,6 +30,10 @@ Once you are done with changes, run `mix compile` and fix any issues.
 Write tests for your changes and run `mix test` afterwards.
 ```
 
+The rules file can also be used to prompt your editor to use certain
+tools above others, so you can steer them towards using your favorite
+Tidewave tools more.
+
 ## Use eval: AI's swiss army knife
 
 AI assistants excel at coding. Since Tidewave can evaluate code within your
