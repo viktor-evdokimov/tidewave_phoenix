@@ -12,11 +12,23 @@ defmodule Tidewave.MCP.Tools.FS do
       %{
         name: "list_project_files",
         description: """
-        Returns a list of all files in the project that are not ignored by .gitignore.
+        Returns a list of files in the project.
+
+        By default, when no arguments are passed, it returns all files in the project that
+        are not ignored by .gitignore.
+
+        Optionally, a glob_pattern can be passed to filter this list. When a pattern is passed,
+        the gitignore check will be skipped.
         """,
         inputSchema: %{
           type: "object",
-          properties: %{},
+          properties: %{
+            glob_pattern: %{
+              type: "string",
+              description:
+                "Optional: a glob pattern to filter the listed files. If a pattern is passed, the .gitignore check will be skipped."
+            }
+          },
           required: []
         },
         callback: &list_project_files/1,
@@ -115,22 +127,6 @@ defmodule Tidewave.MCP.Tools.FS do
         listable: &listable/1
       },
       %{
-        name: "glob_project_files",
-        description: "Searches for files matching the given glob pattern.",
-        inputSchema: %{
-          type: "object",
-          required: ["pattern"],
-          properties: %{
-            pattern: %{
-              type: "string",
-              description: "The glob pattern to match files against, e.g., \"**/*.ex\""
-            }
-          }
-        },
-        callback: &glob_project_files/1,
-        listable: &listable/1
-      },
-      %{
         name: "grep_project_files",
         description:
           "Searches for text patterns in files using #{if ripgrep_executable(), do: "ripgrep", else: "a grep variant"}.",
@@ -167,9 +163,25 @@ defmodule Tidewave.MCP.Tools.FS do
     not is_nil(connect_params["include_fs_tools"])
   end
 
-  def list_project_files(_args) do
-    with {:ok, files} <- GitLS.list_files() do
-      {:ok, Enum.join(files, "\n")}
+  def list_project_files(args) do
+    case args do
+      %{"glob_pattern" => glob_pattern} ->
+        git_ls_files(glob_pattern)
+
+      _ ->
+        git_ls_files(nil)
+    end
+  end
+
+  defp git_ls_files(glob_pattern) do
+    with {:ok, files} <- GitLS.list_files(glob_pattern) do
+      case files do
+        [] ->
+          {:ok, "No files found."}
+
+        files ->
+          {:ok, Enum.join(files, "\n")}
+      end
     end
   end
 
@@ -372,34 +384,6 @@ defmodule Tidewave.MCP.Tools.FS do
 
   defp take_all_or(list, nil), do: list
   defp take_all_or(list, count), do: Enum.take(list, count)
-
-  @doc """
-  Searches for files matching a glob pattern.
-
-  ## Arguments
-  * `pattern` - The glob pattern to match files against
-  """
-  def glob_project_files(args) do
-    case args do
-      %{"pattern" => pattern} ->
-        matches =
-          Path.wildcard(pattern)
-          |> Enum.reject(&File.dir?/1)
-          |> Enum.map(fn path ->
-            rel_path = Path.relative_to(path, File.cwd!())
-
-            %{
-              "path" => rel_path,
-              "name" => Path.basename(path)
-            }
-          end)
-
-        {:ok, Jason.encode!(matches)}
-
-      _ ->
-        {:error, :invalid_arguments}
-    end
-  end
 
   @doc """
   Searches for text patterns in files.
