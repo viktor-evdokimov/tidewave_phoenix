@@ -28,6 +28,8 @@ defmodule Tidewave.MCP.Tools.FS do
         Returns the contents of the given file.
 
         Supports an optional line_offset and count. To read the full file, only the path needs to be passed.
+
+        For security reasons, this tool only works for files that are relative to the project root: #{MCP.root()}.
         """,
         inputSchema: %{
           type: "object",
@@ -198,8 +200,13 @@ defmodule Tidewave.MCP.Tools.FS do
 
   defp safe_path(path) do
     case Path.relative_to(path, MCP.root()) |> Path.safe_relative() do
-      {:ok, path} -> {:ok, path}
-      :error -> {:error, "The path is invalid or not relative to the project root"}
+      {:ok, path} ->
+        {:ok, path}
+
+      :error ->
+        {:error,
+         "The path is invalid or not relative to the project root. " <>
+           "Files outside the root cannot be read for security reasons."}
     end
   end
 
