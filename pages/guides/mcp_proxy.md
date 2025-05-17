@@ -15,10 +15,13 @@ the `mcp-proxy` was installed at. It will be necessary
 in most scenarios in order to use Tidewave. Note on Windows
 the executable will also have the `.exe` extension.
 
-## Other proxies
+## Python-based proxy
 
-There are also other proxies available, for example [an implementation in Python](https://github.com/sparfenyuk/mcp-proxy),
-but it did not handle reconnects last time we tried. The Rust proxy is also simpler to install.
+An alternative MCP Proxy if the Rust version is not working as expected.
+Requires Python tooling on your machine. See [the installation instructions
+on GitHub](https://github.com/sparfenyuk/mcp-proxy).
 
-We also provided an [Elixir based proxy](https://github.com/tidewave-ai/mcp_proxy_elixir) in the past,
-but it is now deprecated as the Rust proxy is simpler to install (as it does not require Elixir).
+Once installation concludes, take note of the full path
+the `mcp-proxy` was installed at. It will be necessary
+in most scenarios in order to use Tidewave. Note on Windows
+the executable will also have the `.exe` extension.
