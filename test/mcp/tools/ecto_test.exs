@@ -158,16 +158,12 @@ defmodule Tidewave.MCP.Tools.EctoTest do
     test "returns list of Ecto schema modules and their file path" do
       assert {:error, "No Ecto schemas found in the project"} = Ecto.get_ecto_schemas(%{})
 
-      [{_mod, bin}] =
-        Code.compile_quoted(
-          quote do
-            defmodule TestSchema do
-              def __changeset__ do
-                %{}
-              end
-            end
+      {:module, _, bin, _} =
+        defmodule Elixir.TestSchema do
+          def __changeset__ do
+            %{}
           end
-        )
+        end
 
       compile_path = Mix.Project.compile_path()
       File.write!("#{compile_path}/Elixir.TestSchema.beam", bin)
@@ -177,7 +173,10 @@ defmodule Tidewave.MCP.Tools.EctoTest do
       end)
 
       {:ok, text} = Ecto.get_ecto_schemas(%{})
-      assert text =~ "TestSchema"
+
+      assert Jason.decode!(text) == [
+               %{"module" => "TestSchema", "source_file" => "test/mcp/tools/ecto_test.exs"}
+             ]
     end
   end
 end
