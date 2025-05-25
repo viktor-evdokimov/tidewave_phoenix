@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.7 (2025-05-25)
+
+* Enhancements
+  * new `get_package_location` tool
+  * removed `glob_project_files` tool by merging it into a new parameter for `list_project_files`
+  * support configuring tools to exclude (or include) with the `tools` plug option (see README)
+* Bug fixes
+  * fix invalid parameter in `get_ecto_schemas` tool
+
 ## 0.1.6 (2025-05-08)
 
 * Bug fixes
