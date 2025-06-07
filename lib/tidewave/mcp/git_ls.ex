@@ -68,11 +68,11 @@ defmodule Tidewave.MCP.GitLS do
   defp parse_line_endings(result) do
     # we ignore the mixed count for now
     {lf_count, crlf_count, _mixed_count} =
-      for line <- String.split(result, "\n", trim: true),
-          [_index_eolinfo, working_tree_eolinfo, _attr, _path] =
-            String.split(line, " ", trim: true),
-          reduce: {0, 0, 0} do
+      for line <- String.split(result, "\n", trim: true), reduce: {0, 0, 0} do
         {lf_count, crlf_count, mixed_count} ->
+          [_index_eolinfo, working_tree_eolinfo | _attrs_and_path] =
+            String.split(line, " ", trim: true)
+
           case working_tree_eolinfo do
             "w/lf" -> {lf_count + 1, crlf_count, mixed_count}
             "w/crlf" -> {lf_count, crlf_count + 1, mixed_count}
