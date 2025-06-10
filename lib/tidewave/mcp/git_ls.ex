@@ -69,7 +69,7 @@ defmodule Tidewave.MCP.GitLS do
     # we ignore the mixed count for now
     {lf_count, crlf_count, _mixed_count} =
       for line <- String.split(result, "\n", trim: true),
-          [_index_eolinfo, working_tree_eolinfo, _attr, _path] =
+          [_index_eolinfo, working_tree_eolinfo | _] =
             String.split(line, " ", trim: true),
           reduce: {0, 0, 0} do
         {lf_count, crlf_count, mixed_count} ->
