@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.8 (2025-06-13)
+
+* Enhancements
+  * change `list_project_files` to always apply `.gitignore`, unless `include_ignored` is passed
+* Bug fixes
+  * fix line ending detection crashing when git returns multiple attributes
+
 ## 0.1.7 (2025-05-25)
 
 * Enhancements
