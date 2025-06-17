@@ -63,6 +63,29 @@ Tidewave will now run on the same port as your regular Phoenix application.
 In particular, the MCP is located by default at http://localhost:4000/tidewave/mcp.
 [You must configure your editor and AI assistants accordingly](https://hexdocs.pm/tidewave/mcp.html).
 
+### Usage in non-Phoenix applications
+
+Tidewave is a regular Plug, so you can use it in any Elixir project, as long as you run a webserver. For example, you can use `bandit` (and `tidewave`) in dev mode in your `mix.exs`:
+
+```elixir
+{:tidewave, "~> 0.1", only: :dev},
+{:bandit, "~> 1.0", only: :dev},
+```
+
+And then when starting your application, you can add the following child spec conditionally to your supervision tree:
+
+```elixir
+  children =
+    children ++
+      # Conditionally start Tidewave server for development
+      if Mix.env() == :dev and Code.ensure_loaded?(Tidewave) and Code.ensure_loaded?(Bandit) do
+        Logger.info("Starting Tidewave server on port 4000 for development")
+        [{Bandit, plug: Tidewave, port: 4000}]
+      else
+        []
+      end
+```
+
 ## Configuration
 
 You may configure the `Tidewave` plug using the following syntax:
