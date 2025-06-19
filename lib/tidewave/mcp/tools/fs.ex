@@ -417,17 +417,13 @@ defmodule Tidewave.MCP.Tools.FS do
     glob_pattern = Map.get(arguments, "glob")
     case_sensitive = Map.get(arguments, "case_sensitive", false)
     max_results = Map.get(arguments, "max_results", 100)
+    tool = tool || if(ripgrep_executable(), do: :ripgrep, else: :elixir)
 
-    cond do
-      tool == :ripgrep ->
+    case tool do
+      :ripgrep ->
         grep_with_ripgrep(pattern, glob_pattern, case_sensitive, max_results)
 
-      tool == :elixir_grep ->
-        MCP.Grep.grep(pattern, glob_pattern, case_sensitive, max_results)
-
-      ripgrep_executable() != nil ->
-        grep_with_ripgrep(pattern, glob_pattern, case_sensitive, max_results)
-
+      :elixir ->
         MCP.Grep.grep(pattern, glob_pattern, case_sensitive, max_results)
     end
   rescue

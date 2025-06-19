@@ -26,7 +26,7 @@ defmodule Tidewave.MCP.Tools.FSSyncTest do
     end
   end
 
-  for tool <- [:ripgrep, :elixir_grep] do
+  for tool <- [:ripgrep, :elixir, nil] do
     describe "grep/1 with #{tool}" do
       @describetag tool
       @describetag :tmp_dir
