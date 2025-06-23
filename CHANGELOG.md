@@ -2,7 +2,10 @@
 
 ## 0.1.9 (2025-06-23)
 
-* workaround Erlang bug OTP-19458 (GH-9222, PR-9349) causing the BEAM to crash on Windows when using Erlang >= 27.0 < 27.3
+* Enhancements
+  * Log and abort start instead of crashing when trying to start Tidewave when Mix is not available
+* Bug fixes
+  * workaround Erlang bug OTP-19458 (GH-9222, PR-9349) causing the BEAM to crash on Windows when using Erlang >= 27.0 < 27.3
 
 ## 0.1.8 (2025-06-13)
 
