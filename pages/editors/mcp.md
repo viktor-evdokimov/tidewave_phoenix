@@ -47,7 +47,6 @@ you must not enable the Tidewave ones, except for assistants like Claude Desktop
 | `read_project_file`        | ✅                    | ✅                 |
 | `edit_project_file`        | ✅                    | ✅                 |
 | `write_project_file`       | ✅                    | ✅                 |
-| `grep_project_files`       | ✅                    | ✅                 |
 | Syntax validation          | ✅                    | ✅                 |
 | Automatic formatting       | ✅                    |                   |
 

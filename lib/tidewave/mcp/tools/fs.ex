@@ -128,36 +128,6 @@ defmodule Tidewave.MCP.Tools.FS do
         },
         callback: &edit_project_file/2,
         listable: &listable/1
-      },
-      %{
-        name: "grep_project_files",
-        description:
-          "Searches for text patterns in files using #{if ripgrep_executable(), do: "ripgrep", else: "a grep variant"}.",
-        inputSchema: %{
-          type: "object",
-          required: ["pattern"],
-          properties: %{
-            pattern: %{
-              type: "string",
-              description: "The pattern to search for"
-            },
-            glob: %{
-              type: "string",
-              description:
-                "Optional glob pattern to filter which files to search in, e.g., \"**/*.ex\". Note that if a glob pattern is used, the .gitignore file will be ignored."
-            },
-            case_sensitive: %{
-              type: "boolean",
-              description: "Whether the search should be case-sensitive. Defaults to false."
-            },
-            max_results: %{
-              type: "integer",
-              description: "Maximum number of results to return. Defaults to 100."
-            }
-          }
-        },
-        callback: &grep_project_files/2,
-        listable: &listable/1
       }
     ]
   end
@@ -401,101 +371,6 @@ defmodule Tidewave.MCP.Tools.FS do
 
   defp take_all_or(list, nil), do: list
   defp take_all_or(list, count), do: Enum.take(list, count)
-
-  @doc """
-  Searches for text patterns in files.
-  Uses ripgrep if available, falling back to grep.
-
-  ## Arguments
-  * `pattern` - The pattern to search for
-  * `glob` - Optional glob pattern to filter files
-  * `case_sensitive` - Whether the search should be case-sensitive
-  * `max_results` - Maximum number of results to return
-  """
-  def grep_project_files(arguments, tool \\ nil) do
-    pattern = Map.fetch!(arguments, "pattern")
-    glob_pattern = Map.get(arguments, "glob")
-    case_sensitive = Map.get(arguments, "case_sensitive", false)
-    max_results = Map.get(arguments, "max_results", 100)
-    tool = tool || if(ripgrep_executable(), do: :ripgrep, else: :elixir)
-
-    case tool do
-      :ripgrep ->
-        grep_with_ripgrep(pattern, glob_pattern, case_sensitive, max_results)
-
-      :elixir ->
-        MCP.Grep.grep(pattern, glob_pattern, case_sensitive, max_results)
-    end
-  rescue
-    e ->
-      {:error, "Error executing grep: #{Exception.format(:error, e, __STACKTRACE__)}"}
-  end
-
-  # Implementation using ripgrep
-  defp grep_with_ripgrep(pattern, glob_pattern, case_sensitive, max_results) do
-    args = [
-      "--no-require-git",
-      "--json",
-      "--max-count=#{max_results}"
-    ]
-
-    # Add case-insensitive flag if needed
-    args = if !case_sensitive, do: ["--ignore-case" | args], else: args
-
-    # Add glob pattern if provided
-    args =
-      if glob_pattern do
-        ["--glob", glob_pattern | args]
-      else
-        args
-      end
-
-    # Add the search pattern and execute
-    args = args ++ [pattern, "."]
-
-    case System.cmd(ripgrep_executable(), args, stderr_to_stdout: true, cd: MCP.root()) do
-      {output, 0} ->
-        matches =
-          output
-          |> String.split("\n", trim: true)
-          |> Enum.map(&parse_ripgrep_line/1)
-          |> Enum.reject(&is_nil/1)
-
-        {:ok, Jason.encode!(matches)}
-
-      {error, _} ->
-        # If pattern wasn't found, ripgrep returns exit code 1, but that's not an error for us
-        if String.contains?(error, "No files were searched") do
-          {:ok, "[]"}
-        else
-          {:error, "Error while searching: #{error}"}
-        end
-    end
-  end
-
-  defp parse_ripgrep_line(line) do
-    case Jason.decode(line) do
-      {:ok, json} ->
-        case json do
-          %{"type" => "match", "data" => data} ->
-            path = data["path"]["text"]
-            line_number = data["line_number"]
-            content = data["lines"]["text"]
-
-            %{
-              "path" => path,
-              "line" => line_number,
-              "content" => Utils.truncate_lines(content)
-            }
-
-          _ ->
-            nil
-        end
-
-      {:error, _} ->
-        nil
-    end
-  end
 
   defp ensure_default_line_endings(assigns) do
     Map.put_new_lazy(assigns, :default_line_endings, fn ->
