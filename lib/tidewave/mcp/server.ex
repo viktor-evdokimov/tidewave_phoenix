@@ -36,7 +36,6 @@ defmodule Tidewave.MCP.Server do
       Tools.Source.tools(),
       Tools.Eval.tools(),
       Tools.Ecto.tools(),
-      Tools.Process.tools(),
       Tools.Phoenix.tools(),
       Tools.Hex.tools()
     ]
