@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.10 (2025-06-24)
+
+* Bug fixes
+  * Fix ecto tools not working in umbrella projects
+  * Fix exceptions in tools not being reported correctly
+
 ## 0.1.9 (2025-06-23)
 
 * Enhancements
