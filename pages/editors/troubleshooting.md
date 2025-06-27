@@ -37,7 +37,7 @@ event: endpoint
 data: http://localhost:4000/tidewave/mcp/message?sessionId=734c52c4-8aec8eb7-2f3dc8c0
 ```
 
-In particular, you want to check that:
+After 30 seconds, you should receive a timeout event, but that's expected. In particular, you want to check that:
 
 * The last two lines of the response including `event: endpoint` with a data payload
 
