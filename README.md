@@ -72,19 +72,15 @@ Tidewave is a regular Plug, so you can use it in any Elixir project, as long as 
 {:bandit, "~> 1.0", only: :dev},
 ```
 
-And then when starting your application, you can add the following child spec conditionally to your supervision tree:
+And then adding an alias in your `mix.exs`:
 
 ```elixir
-  children =
-    children ++
-      # Conditionally start Tidewave server for development
-      if Mix.env() == :dev and Code.ensure_loaded?(Tidewave) and Code.ensure_loaded?(Bandit) do
-        Logger.info("Starting Tidewave server on port 4000 for development")
-        [{Bandit, plug: Tidewave, port: 4000}]
-      else
-        []
-      end
+aliases: [
+  tidewave: "run -e 'Bandit.start_link(plug: Tidewave, port: 4000)' --no-halt"
+]
 ```
+
+Now run `mix tidewave` and Tidewave will be available at `localhost:4000/tidewave`.
 
 ## Configuration
 

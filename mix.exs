@@ -9,6 +9,9 @@ defmodule Tidewave.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
+      aliases: [
+        tidewave: "run --no-halt -e 'Bandit.start_link(plug: Tidewave, port: 4000)'"
+      ],
 
       # Docs
       name: "Tidewave",
@@ -41,7 +44,7 @@ defmodule Tidewave.MixProject do
       {:circular_buffer, "~> 0.4"},
       {:req, "~> 0.5"},
       {:igniter, "~> 0.5 and >= 0.5.47", optional: true},
-      {:bandit, "~> 1.6", only: :test},
+      {:bandit, "~> 1.6", only: [:dev, :test]},
       {:ex_doc, ">= 0.0.0", only: :docs},
       {:makeup_json, ">= 0.0.0", only: :docs}
     ]
