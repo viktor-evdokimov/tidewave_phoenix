@@ -12,6 +12,8 @@ Create a file at `.cursor/mcp.json` and add the following contents.
 
 ### MCP Proxy (recommended)
 
+See the [MCP proxy documentation](guides/mcp_proxy.md).
+
 On macOS/Linux:
 
 ```json
