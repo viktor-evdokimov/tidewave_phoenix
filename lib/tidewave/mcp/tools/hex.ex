@@ -6,7 +6,7 @@ defmodule Tidewave.MCP.Tools.Hex do
   def tools do
     [
       %{
-        name: "package_docs_search",
+        name: "search_package_docs",
         description: """
         Searches Hex documentation for the project's dependencies or a list of packages.
 
@@ -32,39 +32,12 @@ defmodule Tidewave.MCP.Tools.Hex do
             }
           }
         },
-        callback: &package_docs_search/1
-      },
-      %{
-        name: "package_search",
-        description: """
-        Searches for packages on Hex.
-
-        Use this tool if you need to find new packages to add to the project. Before using this tool,
-        get an overview of the existing dependencies by using the `get_package_location` tool to find existing dependencies.
-
-        By default, the packages are sorted by popularity (number of downloads).
-        """,
-        inputSchema: %{
-          type: "object",
-          required: ["search"],
-          properties: %{
-            search: %{
-              type: "string",
-              description: "The search term"
-            },
-            sort: %{
-              type: "string",
-              description:
-                "Sort parameter (e.g., 'downloads', 'inserted_at', 'updated_at'). Defaults to 'downloads'."
-            }
-          }
-        },
-        callback: &package_search/1
+        callback: &search_package_docs/1
       }
     ]
   end
 
-  def package_docs_search(args) do
+  def search_package_docs(args) do
     case args do
       %{"q" => q} ->
         filter_by =
@@ -156,42 +129,6 @@ defmodule Tidewave.MCP.Tools.Hex do
       end
 
     Enum.max(versions, Version)
-  end
-
-  def package_search(args) do
-    case args do
-      %{"search" => search} ->
-        sort = Map.get(args, "sort")
-
-        query_params = %{search: search}
-        query_params = if sort, do: Map.put(query_params, :sort, sort), else: query_params
-        opts = Keyword.merge(req_opts(), params: query_params)
-
-        case Req.get("https://hex.pm/api/packages", opts) do
-          {:ok, %{status: 200, body: %{"packages" => packages}}} ->
-            {:ok,
-             packages
-             |> Enum.map(fn
-               %{"name" => name, "latest_version" => version, "downloads" => downloads} ->
-                 %{
-                   name: name,
-                   version: version,
-                   downloads: downloads,
-                   documentation_uri: "https://hexdocs.pm/#{name}/#{version}"
-                 }
-             end)
-             |> Jason.encode!()}
-
-          {:ok, %{status: status, body: body}} ->
-            {:error, "HTTP error #{status} - #{inspect(body)}"}
-
-          {:error, reason} ->
-            {:error, "Request failed\n\n#{inspect(reason)}"}
-        end
-
-      _ ->
-        {:error, :invalid_arguments}
-    end
   end
 
   defp req_opts do

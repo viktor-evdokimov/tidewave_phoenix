@@ -76,19 +76,16 @@ In particular:
     project packages. The tool supports additional packages to be given,
     which you must then confirm before allowing the tool to run
 
-  * When searching packages, Tidewave only returns their names and versions,
-    as to avoid any package description from entering the conversation.
-
 ## Data privacy
 
 Tidewave's MCP tool runs completely on your machine and therefore all data
 stays on your machine, with the exception of:
 
-  * `package_search` and `package_docs_search` tasks will query the package manager
-    of your programming language, such as RubyGems and Hex.pm
+  * `search_package_docs` tasks will query the package manager
+    of your programming language, such as Hex.pm
 
-  * Commands that evaluate code may invoke HTTP clients or `curl`, which may cause data
-    to leave your machine
+  * Commands that evaluate code may invoke HTTP clients or `curl`,
+    which may cause data to leave your machine
 
 You should evaluate those commands accordingly and stop your editor/assistant
 from running them if they are a concern. All other data is directly handled by
