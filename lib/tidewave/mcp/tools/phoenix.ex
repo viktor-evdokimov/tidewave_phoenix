@@ -78,7 +78,7 @@ defmodule Tidewave.MCP.Tools.Phoenix do
       memory: info[:memory],
       message_queue_len: info[:message_queue_len],
       state:
-        "Could not get state, maybe the process is busy? Try looking at the current_stacktrace from get_process_info."
+        "Could not get state, maybe the process is busy? Try using project_eval and `Process.info(pid, :current_stacktrace)` to see what's going on."
     }
   end
 
