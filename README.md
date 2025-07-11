@@ -12,7 +12,6 @@ Tidewave provides tools that allow your LLM of choice to:
 
 - get documentation
 - inspect your application logs to help debug errors
-- inspect and trace processes
 - execute SQL queries and inspect your database
 - evaluate custom Elixir code in the context of your project
 - find Hex packages and search your dependencies
@@ -28,7 +27,7 @@ You can install Tidewave by adding the `tidewave` package to your list of depend
 ```elixir
 def deps do
   [
-    {:tidewave, "~> 0.1", only: :dev}
+    {:tidewave, "~> 0.2", only: :dev}
   ]
 end
 ```

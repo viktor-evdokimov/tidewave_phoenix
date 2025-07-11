@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2.0 (2025-07-11)
+
+This release removes the `get_process_info` and `trace_process` tools. If you happened to use those a lot in the past,
+consider writing an AGENTS.md (or similar) instructions file to explain to your agent that it can do the same using
+`project_eval` and providing Elixir code. In Elixir 1.18.4+, there's also the `IEx.Helpers.process_info/1` function which does the same as `get_process_info`.
+
+Furthermore, we also removed `package_search` because it turned out to not be that useful. `package_docs_search` was renamed to `search_package_docs`.
+
+If you used the file system tools (which are only useful for Claude Desktop that does not provide file system integration by itself), we also removed the
+dedicated `grep_project_files` tool in favor of calling `git grep` (or similar) using `shell_eval`.
+
+* Enhancements
+  * Add `level` parameter to logs tool to specify a minimum log level
+  * Add dedicated `get_docs` tool
+
 ## 0.1.10 (2025-06-24)
 
 * Bug fixes

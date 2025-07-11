@@ -4,7 +4,7 @@ defmodule Tidewave.MixProject do
   def project do
     [
       app: :tidewave,
-      version: "0.1.10",
+      version: "0.2.0",
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -41,7 +41,7 @@ defmodule Tidewave.MixProject do
     [
       {:plug, "~> 1.17"},
       {:jason, "~> 1.4"},
-      {:circular_buffer, "~> 0.4"},
+      {:circular_buffer, "~> 0.4 or ~> 1.0"},
       {:req, "~> 0.5"},
       {:igniter, "~> 0.5 and >= 0.5.47", optional: true},
       {:bandit, "~> 1.6", only: [:dev, :test]},
