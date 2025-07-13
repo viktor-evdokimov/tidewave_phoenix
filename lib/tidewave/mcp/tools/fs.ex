@@ -5,8 +5,6 @@ defmodule Tidewave.MCP.Tools.FS do
   alias Tidewave.MCP.GitLS
   alias Tidewave.MCP.Utils
 
-  def ripgrep_executable, do: System.find_executable("rg")
-
   def tools do
     [
       %{
