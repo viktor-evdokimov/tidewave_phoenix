@@ -15,12 +15,14 @@ defmodule Tidewave.MCP.Tools.LogsTest do
   end
 
   describe "get_logs/2" do
+    @tag :capture_log
     test "returns the logged content" do
       Logger.info("hello darkness my old friend")
       {:ok, logs} = Logs.get_logs(%{"tail" => 10})
       assert logs =~ "hello darkness my old friend"
     end
 
+    @tag :capture_log
     test "filters by level" do
       Logger.debug("this will not be seen")
       Logger.error("hello darkness my old friend")
