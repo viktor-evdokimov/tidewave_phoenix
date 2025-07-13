@@ -12,23 +12,10 @@ defmodule Tidewave.MCP.GitLS do
   end
 
   defp execute_git(fun) do
-    cond do
-      !System.find_executable("git") ->
-        {:error, "This tool requires git to be installed and available in the PATH."}
-
-      File.dir?(".git") ->
-        fun.(nil)
-
-      true ->
-        # create an empty git repo to run ls-files
-        tmp_dir = Path.join(Mix.Project.build_path(), "tmp")
-        git_dir = Path.join(tmp_dir, ".git")
-
-        if !File.dir?(git_dir) do
-          {_, 0} = System.cmd("git", ["init", tmp_dir])
-        end
-
-        fun.(git_dir)
+    if git = MCP.git_root() do
+      fun.(Path.join(git, ".git"))
+    else
+      {:error, "This tool requires git to be installed and available in the PATH."}
     end
   end
 
@@ -36,9 +23,7 @@ defmodule Tidewave.MCP.GitLS do
     glob_pattern = Keyword.get(opts, :glob)
     include_ignored = Keyword.get(opts, :include_ignored, false)
 
-    args = if git_dir, do: ["--git-dir", git_dir], else: []
-    args = args ++ ["ls-files", "--cached", "--others"]
-
+    args = ["--git-dir", git_dir, "ls-files", "--cached", "--others"]
     args = if glob_pattern, do: args ++ [glob_pattern], else: args
     args = if include_ignored, do: args, else: args ++ ["--exclude-standard"]
 
@@ -50,8 +35,15 @@ defmodule Tidewave.MCP.GitLS do
   end
 
   defp detect_line_endings(git_dir) do
-    args = if git_dir, do: ["--git-dir", git_dir], else: []
-    args = args ++ ["ls-files", "--cached", "--others", "--exclude-standard", "--eol"]
+    args = [
+      "--git-dir",
+      git_dir,
+      "ls-files",
+      "--cached",
+      "--others",
+      "--exclude-standard",
+      "--eol"
+    ]
 
     with {result, 0} <- System.cmd("git", args, cd: MCP.root()) do
       {:ok, parse_line_endings(result)}

@@ -32,6 +32,11 @@ defmodule Tidewave.MCP do
   def root, do: Application.fetch_env!(:tidewave, :root)
 
   @doc """
+  Returns the git root if any.
+  """
+  def git_root, do: Application.fetch_env!(:tidewave, :git_root)
+
+  @doc """
   Returns the project name.
   """
   def project_name, do: Application.fetch_env!(:tidewave, :project_name)
@@ -58,6 +63,23 @@ defmodule Tidewave.MCP do
   defp init_config() do
     if Application.get_env(:tidewave, :root) == nil do
       Application.put_env(:tidewave, :root, File.cwd!())
+    end
+
+    if Application.get_env(:tidewave, :git_root) == nil and System.find_executable("git") != nil do
+      case System.cmd("git", ["rev-parse", "--show-toplevel"]) do
+        {path, 0} ->
+          Application.put_env(:tidewave, :git_root, String.trim(path))
+
+        {_, _} ->
+          tmp_dir = Path.join(Mix.Project.build_path(), "tmp")
+          git_dir = Path.join(tmp_dir, ".git")
+
+          if not File.dir?(git_dir) do
+            {_, 0} = System.cmd("git", ["init", tmp_dir])
+          end
+
+          Application.put_env(:tidewave, :git_root, String.trim(tmp_dir))
+      end
     end
 
     if Application.get_env(:tidewave, :project_name) == nil do
