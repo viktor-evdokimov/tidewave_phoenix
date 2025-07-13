@@ -10,7 +10,8 @@ defmodule Tidewave.MixProject do
       deps: deps(),
       package: package(),
       aliases: [
-        tidewave: "run --no-halt -e 'Bandit.start_link(plug: Tidewave, port: 4000)'"
+        tidewave:
+          "run --no-halt -e 'Agent.start(fn -> Bandit.start_link(plug: Tidewave, port: 4000) end)'"
       ],
 
       # Docs
