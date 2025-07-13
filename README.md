@@ -75,7 +75,8 @@ And then adding an alias in your `mix.exs`:
 
 ```elixir
 aliases: [
-  tidewave: "run -e 'Bandit.start_link(plug: Tidewave, port: 4000)' --no-halt"
+  tidewave:
+    "run --no-halt -e 'Agent.start(fn -> Bandit.start_link(plug: Tidewave, port: 4000) end)'"
 ]
 ```
 
