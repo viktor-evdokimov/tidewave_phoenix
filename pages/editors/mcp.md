@@ -2,7 +2,8 @@
 
 You can integrate Tidewave into any editor or AI assistant that supports the Model Context Protocol (MCP). We have tailored instructions for some of them:
 
-  * [Claude Code and Claude Desktop](claude.md)
+  * [Claude Code](claude.md)
+  * [Claude Desktop](claude_code.md)
   * [Cursor](cursor.md)
   * [Neovim](neovim.md)
   * [VS Code](vscode.md)
@@ -35,20 +36,19 @@ Here is a baseline comparison of the tools supported by different frameworks/lan
 ### Filesystem tools
 
 Our MCP servers may also accept `/tidewave/mcp?include_fs_tools=true` option,
-which enables your assistant to run shell commands as well as list, read, write,
-edit, and search files. Most editors already provide such tools, and therefore
-you must not enable the Tidewave ones, except for assistants like Claude Desktop:
+which enables your assistant to run shell commands as well as list, read and write
+files. Writing and editing files may also perform syntax validation and automatic
+formatting.
+
+Most editors and CLI tools already provide this functionality which are better
+integrated into their specific environments. The ones below are kept minimal
+and mentioned here for documentation purposes:
 
 | Features                   | Tidewave for Phoenix | Tidewave for Rails |
 | :------------------------- | :------------------: | :----------------: |
 | `shell_eval`               | ✅                    | ✅                 |
 | `list_project_files`       | ✅                    | ✅                 |
 | `read_project_file`        | ✅                    | ✅                 |
-| `edit_project_file`        | ✅                    | ✅                 |
 | `write_project_file`       | ✅                    | ✅                 |
 | Syntax validation          | ✅                    | ✅                 |
 | Automatic formatting       | ✅                    |                   |
-
-Tidewave stores the timestamps files have been read and written to, to avoid accidentally
-overriding previous work. Writing and editing files may also perform syntax validation and
-automatic formatting.
