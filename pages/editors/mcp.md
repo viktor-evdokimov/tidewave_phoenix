@@ -47,7 +47,6 @@ and mentioned here for documentation purposes:
 | Features                   | Tidewave for Phoenix | Tidewave for Rails |
 | :------------------------- | :------------------: | :----------------: |
 | `shell_eval`               | ✅                    | ✅                 |
-| `list_project_files`       | ✅                    | ✅                 |
 | `read_project_file`        | ✅                    | ✅                 |
 | `write_project_file`       | ✅                    | ✅                 |
 | Syntax validation          | ✅                    | ✅                 |
