@@ -4,26 +4,10 @@ defmodule Tidewave.MCP.GitLS do
   alias Tidewave.MCP
 
   def list_files(opts \\ []) do
-    execute_git(fn git_dir -> list_files(git_dir, opts) end)
-  end
-
-  def detect_line_endings do
-    execute_git(&detect_line_endings/1)
-  end
-
-  defp execute_git(fun) do
-    if git = MCP.git_root() do
-      fun.(Path.join(git, ".git"))
-    else
-      {:error, "This tool requires git to be installed and available in the PATH."}
-    end
-  end
-
-  defp list_files(git_dir, opts) do
     glob_pattern = Keyword.get(opts, :glob)
     include_ignored = Keyword.get(opts, :include_ignored, false)
 
-    args = ["--git-dir", git_dir, "ls-files", "--cached", "--others"]
+    args = ["ls-files", "--cached", "--others"]
     args = if glob_pattern, do: args ++ [glob_pattern], else: args
     args = if include_ignored, do: args, else: args ++ ["--exclude-standard"]
 
@@ -34,16 +18,8 @@ defmodule Tidewave.MCP.GitLS do
     end
   end
 
-  defp detect_line_endings(git_dir) do
-    args = [
-      "--git-dir",
-      git_dir,
-      "ls-files",
-      "--cached",
-      "--others",
-      "--exclude-standard",
-      "--eol"
-    ]
+  def detect_line_endings do
+    args = ["ls-files", "--cached", "--others", "--exclude-standard", "--eol"]
 
     with {result, 0} <- System.cmd("git", args, cd: MCP.root()) do
       {:ok, parse_line_endings(result)}

@@ -9,6 +9,7 @@ defmodule Tidewave.MCP.Tools.FSSyncTest do
       # Change to the test directory to make grep search there
       original_dir = File.cwd!()
       File.cd!(tmp_dir)
+      System.cmd("git", ["init"])
 
       # also overwrite the stored MCP working directory
       old_root = Application.get_env(:tidewave, :root)
