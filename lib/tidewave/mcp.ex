@@ -2,6 +2,7 @@ defmodule Tidewave.MCP do
   @moduledoc false
 
   use Supervisor
+  require Logger
 
   alias Tidewave.MCP
 
@@ -32,6 +33,11 @@ defmodule Tidewave.MCP do
   def root, do: Application.fetch_env!(:tidewave, :root)
 
   @doc """
+  Returns the git root if any.
+  """
+  def git_root, do: Application.fetch_env!(:tidewave, :git_root)
+
+  @doc """
   Returns the project name.
   """
   def project_name, do: Application.fetch_env!(:tidewave, :project_name)
@@ -58,6 +64,16 @@ defmodule Tidewave.MCP do
   defp init_config() do
     if Application.get_env(:tidewave, :root) == nil do
       Application.put_env(:tidewave, :root, File.cwd!())
+    end
+
+    if System.find_executable("git") &&
+         match?({_, 0}, System.cmd("git", ["rev-parse", "--show-toplevel"])) do
+      :ok
+    else
+      Logger.warning(
+        "Some Tidewave tools are only available for codebases using `git`. " <>
+          "Make sure `git` is installed and run `git init` before continuing"
+      )
     end
 
     if Application.get_env(:tidewave, :project_name) == nil do
