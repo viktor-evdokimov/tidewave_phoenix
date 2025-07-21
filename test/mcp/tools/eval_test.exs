@@ -21,7 +21,8 @@ defmodule Tidewave.MCP.Tools.EvalTest do
     test "evaluates simple Elixir expressions" do
       code = "1 + 1"
 
-      assert {:ok, "2", %{}} = Eval.project_eval(%{"code" => code}, Tidewave.init([]))
+      assert {:ok, json, %{}} = Eval.project_eval(%{"code" => code}, Tidewave.init([]))
+      assert Jason.decode!(json) == %{"result" => "2", "stdout" => ""}
     end
 
     test "evaluates complex Elixir expressions" do
@@ -33,13 +34,37 @@ defmodule Tidewave.MCP.Tools.EvalTest do
       Temp.add(40, 2)
       """
 
-      assert {:ok, "42", %{}} = Eval.project_eval(%{"code" => code}, Tidewave.init([]))
+      assert {:ok, json, %{}} = Eval.project_eval(%{"code" => code}, Tidewave.init([]))
+      assert Jason.decode!(json) == %{"result" => "42", "stdout" => ""}
+    end
+
+    test "suports arguments" do
+      assert {:ok, json, %{}} =
+               Eval.project_eval(
+                 %{"code" => "arguments", "arguments" => [1, "2"]},
+                 Tidewave.init([])
+               )
+
+      assert Jason.decode!(json) == %{"result" => "[1, \"2\"]", "stdout" => ""}
+    end
+
+    test "returns strings as is" do
+      file = File.read!(__ENV__.file)
+
+      assert {:ok, json, %{}} =
+               Eval.project_eval(
+                 %{"code" => "hd(arguments)", "arguments" => [file]},
+                 Tidewave.init([])
+               )
+
+      assert Jason.decode!(json) == %{"result" => file, "stdout" => ""}
     end
 
     test "returns formatted errors for exceptions" do
       code = "1 / 0"
 
-      assert {:ok, error, %{}} = Eval.project_eval(%{"code" => code}, Tidewave.init([]))
+      assert {:ok, json, %{}} = Eval.project_eval(%{"code" => code}, Tidewave.init([]))
+      assert %{"result" => error, "stdout" => ""} = Jason.decode!(json)
       assert error =~ "ArithmeticError"
       assert error =~ "bad argument in arithmetic expression"
     end
@@ -47,8 +72,8 @@ defmodule Tidewave.MCP.Tools.EvalTest do
     test "can use IEx helpers" do
       code = "h Tidewave"
 
-      assert {:ok, docs, %{}} = Eval.project_eval(%{"code" => code}, Tidewave.init([]))
-
+      assert {:ok, json, %{}} = Eval.project_eval(%{"code" => code}, Tidewave.init([]))
+      assert %{"result" => "", "stdout" => docs} = Jason.decode!(json)
       assert docs =~ "Tidewave"
     end
 
@@ -69,21 +94,24 @@ defmodule Tidewave.MCP.Tools.EvalTest do
     end
 
     test "returns IO up to exception" do
-      assert {:ok, result, %{}} =
+      assert {:ok, json, %{}} =
                Eval.project_eval(%{"code" => ~s[IO.puts("Hello!"); 1 / 0]}, Tidewave.init([]))
 
-      assert result =~ "Hello!"
-      assert result =~ "ArithmeticError"
+      assert %{"result" => error, "stdout" => stdout} = Jason.decode!(json)
+      assert stdout =~ "Hello!"
+      assert error =~ "ArithmeticError"
     end
 
     test "captures standard_error" do
-      assert {:ok, result, %{}} =
+      assert {:ok, json, %{}} =
                Eval.project_eval(
                  %{"code" => "hello"},
                  Tidewave.init([])
                )
 
-      assert result =~ "undefined variable \"hello\""
+      assert %{"result" => result, "stdout" => stdout} = Jason.decode!(json)
+      assert result =~ "** (CompileError)"
+      assert stdout =~ "undefined variable \"hello\""
     end
   end
 
